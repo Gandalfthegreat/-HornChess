@@ -20,3 +20,6 @@ A has one chess piece; B has two pieces
 
 ## Design
 We use Haskell and the brick library to implement the game.
+
+## Team Members
+Chao Wang, Mingxuan Zhang, Qiwen Zhao, Han Cao
