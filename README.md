@@ -7,6 +7,7 @@ You can play it with the [link](https://glukkazan.github.io/breakthrough/horn-ch
 
 ## Chess Set
 The checkerboard is a a curved triangle, with several straight lines drawn inside parallel to the bottom side and then diagonal lines are drawn to connect between the adjacent paralleled lines.
+
 ![avatar](./220px-horn-chess.jpg)
 
 A has one chess piece; B has two pieces
