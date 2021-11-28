@@ -23,3 +23,5 @@ We use Haskell and the brick library to implement the game.
 
 ## Team Members
 [Chao Wang](https://github.com/Gandalfthegreat), [Mingxuan Zhang](https://github.com/johncheunghust), [Qiwen Zhao](https://github.com/ReynoldZhao), [Han Cao](https://github.com/caoh18)
+
+## Milestone2
