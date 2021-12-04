@@ -52,3 +52,18 @@ We use Haskell and the brick library to implement the game.
 ## Expectation
 
 Yes, for now, we are positive that we can meet our goals before deadline
+
+
+
+## For Developers
+
+
+### Run
+Production:
+```
+  stack run hornchess
+```
+Develop(hot update)
+```
+  stack build --file-watch
+```
