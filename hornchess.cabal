@@ -25,7 +25,10 @@ source-repository head
 
 library
   exposed-modules:
+      Control
       Lib
+      Model
+      View
   other-modules:
       Paths_hornchess
   hs-source-dirs:

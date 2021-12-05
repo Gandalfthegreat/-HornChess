@@ -7,8 +7,8 @@ import qualified Brick.Widgets.Border as B
 import qualified Brick.Widgets.Center as C
 import Brick.Widgets.Core
 import Control.Monad (void)
-import Graphics.Vty.Input.Events
 import Lib
+import Model
 
 main :: IO ()
 main = do
