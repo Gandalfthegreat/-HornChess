@@ -23,6 +23,11 @@ dependencies:
 - base >= 4.7 && < 5
 - brick
 - vty
+- linear
+- vector
+- containers
+- microlens
+- microlens-th
 
 library:
   source-dirs: src
