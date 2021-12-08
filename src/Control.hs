@@ -5,12 +5,53 @@ import Brick.Types
 import Graphics.Vty.Input.Events
 import Model
 
-handleEvent :: St -> BrickEvent () e -> EventM () (Next St)
-handleEvent s e =
-  case e of
-    VtyEvent vtye ->
-      --- press q t exit the program
-      case vtye of
-        EvKey KEsc [] -> halt s
-        _ -> continue s
-    _ -> continue s
+import Brick hiding (Result)
+import qualified Graphics.Vty as V
+import qualified Brick.Types as T
+import Board
+import Control.Monad.IO.Class (MonadIO(liftIO))
+-- import Model.Player 
+
+-------------------------------------------------------------------------------
+
+control :: PlayState -> BrickEvent n () -> EventM n (Next PlayState)
+control s ev = case ev of 
+  T.VtyEvent (V.EvKey (V.KChar '0' )[]) -> Brick.continue (flipblack s)
+  T.VtyEvent (V.EvKey (V.KChar '1')[]) -> nextS s =<< liftIO (play1 s up)
+  T.VtyEvent (V.EvKey (V.KChar '2')[]) -> nextS s =<< liftIO (play1 s upRight)
+  T.VtyEvent (V.EvKey (V.KChar '3')[]) -> nextS s =<< liftIO (play1 s right)
+  T.VtyEvent (V.EvKey (V.KChar '4')[]) -> nextS s =<< liftIO (play1 s downRight)
+  T.VtyEvent (V.EvKey (V.KChar '5')[]) -> nextS s =<< liftIO (play1 s down)
+  T.VtyEvent (V.EvKey (V.KChar '6')[]) -> nextS s =<< liftIO (play1 s downLeft)
+  T.VtyEvent (V.EvKey (V.KChar '7')[]) -> nextS s =<< liftIO (play1 s left)
+  T.VtyEvent (V.EvKey (V.KChar '8')[]) -> nextS s =<< liftIO (play1 s upLeft)
+  T.VtyEvent (V.EvKey V.KEsc _)   -> Brick.halt s
+  _                               -> Brick.continue s -- Brick.halt s
+
+
+
+flipblack :: PlayState -> PlayState
+flipblack s = case b of
+  Black1 -> s {psTurn = Black2}
+  Black2 -> s {psTurn = Black1}
+  _ ->s
+  where
+    b = psTurn s
+
+play1 :: PlayState -> (Int->Board->Int)-> IO (Board.Result Board)
+play1 s f
+  | pos == npos =  return Retry
+  | otherwise = putB bo xo pos npos
+  where
+    xo = psTurn s
+    bo = psBoard s
+    pos = Board.findpos xo bo
+    npos = f pos bo
+
+
+-------------------------------------------------------------------------------
+nextS :: PlayState -> Board.Result Board -> EventM n (Next PlayState)
+-------------------------------------------------------------------------------
+nextS s b = case next s b of
+  Right s' -> continue s'
+  Left res -> halt (s { psResult = res }) 
