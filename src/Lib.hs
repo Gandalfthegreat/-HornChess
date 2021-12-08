@@ -20,5 +20,5 @@ app =
       appChooseCursor = const . const Nothing, -- don't need cursor
       appHandleEvent = handleEvent, -- handle event to change state
       appStartEvent = return,
-      appAttrMap = const $ attrMap mempty [] -- add style to UI
+      appAttrMap = const theMap -- add style to UI
     }

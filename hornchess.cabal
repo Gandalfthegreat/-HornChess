@@ -36,6 +36,11 @@ library
   build-depends:
       base >=4.7 && <5
     , brick
+    , containers
+    , linear
+    , microlens
+    , microlens-th
+    , vector
     , vty
   default-language: Haskell2010
 
@@ -49,7 +54,12 @@ executable hornchess-exe
   build-depends:
       base >=4.7 && <5
     , brick
+    , containers
     , hornchess
+    , linear
+    , microlens
+    , microlens-th
+    , vector
     , vty
   default-language: Haskell2010
 
@@ -64,6 +74,11 @@ test-suite hornchess-test
   build-depends:
       base >=4.7 && <5
     , brick
+    , containers
     , hornchess
+    , linear
+    , microlens
+    , microlens-th
+    , vector
     , vty
   default-language: Haskell2010
