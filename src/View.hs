@@ -4,6 +4,8 @@
 
 module View where
 
+import Board
+import qualified Board as Chess
 import Brick
   ( App (..),
     AttrMap,
@@ -67,7 +69,8 @@ draw st = [C.center (drawGrid st)]
 drawGrid :: PlayState -> Widget Name
 drawGrid st =
   withBorderStyle BS.unicodeBold $
-    B.borderWithLabel (str "HornChess") $ vBox rows
+    B.borderWithLabel (str "HornChess" <+> str "white in" <+> str (show (findpos White (psBoard st)))) $
+      vBox rows
   where
     -- draw all the cells in the grid.
     -- a cell represent  disk, peg or Empty.
@@ -144,7 +147,10 @@ basePos =
     V2 56 54
   ]
 
+--  >>> initialBoard
 -- chessShape
+
+-- >>> chessRow
 chessRow y = fmap (\x -> V2 x y) [0 .. 3] -- generate one row of the chess
 
 chessRows = concat (fmap (\y -> chessRow y) [0, 1]) -- generate whole chess
