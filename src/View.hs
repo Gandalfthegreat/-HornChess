@@ -4,6 +4,8 @@
 
 module View where
 
+import Board
+import qualified Board as Chess
 import Brick
   ( App (..),
     AttrMap,
@@ -67,17 +69,18 @@ draw st = [C.center (drawGrid st)]
 drawGrid :: PlayState -> Widget Name
 drawGrid st =
   withBorderStyle BS.unicodeBold $
-    B.borderWithLabel (str "HornChess") $ vBox rows
+    B.borderWithLabel (str "HornChess" <+> str "white in" <+> str (show (findpos White (psBoard st)))) $
+      vBox rows
   where
     -- draw all the cells in the grid.
     -- a cell represent  disk, peg or Empty.
     rows = [hBox $ cellsInRow r | r <- [height -1, height -2 .. 0]]
     cellsInRow y = [drawCoord (V2 x y) | x <- [0 .. width -1]]
     drawCoord = drawCell . cellAt
-
+    b = psBoard st
     cellAt c -- give a coordinate, return a state of pixel
-      | isPartOfWhite c = WhiteChess
-      | isPartOfBlack c = BlackChess
+      | isPartOfWhite c b = WhiteChess
+      | isPartOfBlack c b = BlackChess
       | isPartOfBoard c = Board
       | otherwise = Background
 
@@ -96,18 +99,17 @@ indexToBase = [(24, 89), (23, 79)]
 isPartOfBoard :: V2 Integer -> Bool
 isPartOfBoard c = c `elem` pegBase
 
-isPartOfBlack :: V2 Integer -> Bool
-isPartOfBlack c = c `elem` blackList
+isPartOfBlack c b = c `elem` blackList b
 
-isPartOfWhite :: V2 Integer -> Bool
-isPartOfWhite c = c `elem` whiteList
+isPartOfWhite c b = c `elem` (whiteList b)
 
 -- whiteList = [V2 01 02]
 
-blackList :: [V2 Integer]
-blackList = [V2 15 18, V2 19 30]
+blackList :: M.Map Int Chess -> [V2 Integer]
+blackList b = chessRenderBlack b
 
-whiteList = chessRows
+whiteList :: M.Map Int Chess -> [V2 Integer]
+whiteList b = chessRenderWhite b
 
 -- [ V2 40 1,
 --   V2 4 1,
@@ -129,6 +131,7 @@ pegBase :: [V2 Integer]
 pegBase = horizontalLine ++ zone1 ++ zone2 ++ zone3 ++ zone4 ++ zone5 ++ zone6
 
 basePos =
+  -- base position for chess
   [ V2 40 1,
     V2 4 1,
     V2 41 12,
@@ -144,10 +147,30 @@ basePos =
     V2 56 54
   ]
 
+--  >>> initialBoard
 -- chessShape
+
+-- >>> chessRow
 chessRow y = fmap (\x -> V2 x y) [0 .. 3] -- generate one row of the chess
 
 chessRows = concat (fmap (\y -> chessRow y) [0, 1]) -- generate whole chess
+
+-- initialBoard
+chessRenderBlack b = concat (fmap (\x -> checkBlack x b) [0 .. 12])
+
+checkBlack x b =
+  case b M.! x of
+    Black1 -> fmap (\y -> (basePos !! x) + y) chessRows
+    Black2 -> fmap (\y -> (basePos !! x) + y) chessRows
+    otherwise -> []
+
+chessRenderWhite b = concat (fmap (\x -> checkWhite x b) [0 .. 12])
+
+checkWhite :: Int -> M.Map Int Chess -> [V2 Integer]
+checkWhite x b =
+  case b M.! x of
+    White -> fmap (\y -> (basePos !! x) + y) chessRows
+    otherwise -> []
 
 -- boardShape
 horizontalLine =
@@ -183,7 +206,7 @@ zone2 =
     ++ fmap (\x -> V2 x 20) ([11, 25, 26, 44])
     ++ fmap (\x -> V2 x 21) ([12] ++ [22 .. 24] ++ [44])
     ++ fmap (\x -> V2 x 22) ([12, 20, 21, 44])
-    ++ fmap (\x -> V2 x 23) ([13] ++ [17 .. 19] ++ [43])
+    ++ fmap (\x -> V2 x 23) ([13] ++ [17 .. 19] ++ [45])
     ++ fmap (\x -> V2 x 24) ([13, 15, 16, 45])
 
 -- ....................................................
@@ -197,7 +220,7 @@ zone3 =
     ++ fmap (\x -> V2 x 32) ([16] ++ [25 .. 27] ++ [46])
     ++ fmap (\x -> V2 x 33) ([17] ++ [23, 24] ++ [46])
     ++ fmap (\x -> V2 x 34) ([17] ++ [20 .. 22] ++ [46])
-    ++ fmap (\x -> V2 x 35) ([15] ++ [33 .. 35] ++ [45])
+    ++ fmap (\x -> V2 x 35) ([17] ++ [33 .. 35] ++ [45])
 
 zone4 =
   fmap (\x -> V2 x 36) ([18] ++ [45] ++ [46])
