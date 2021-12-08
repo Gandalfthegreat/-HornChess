@@ -46,6 +46,7 @@ import Lens.Micro ((%~), (&), (.~), (^.))
 import Lens.Micro.TH (makeLenses)
 import Linear.V2 (V2 (..), _x, _y)
 import Model
+import Board
 
 -------------------------------------------------------Helper Function----------------------------------------------------
 
@@ -105,9 +106,9 @@ isPartOfWhite c = c `elem` whiteList
 -- whiteList = [V2 01 02]
 
 blackList :: [V2 Integer]
-blackList = [V2 15 18, V2 19 30]
+blackList = chessRenderBlack
 
-whiteList = chessRows
+whiteList = chessRenderWhite
 
 -- [ V2 40 1,
 --   V2 4 1,
@@ -128,7 +129,7 @@ whiteList = chessRows
 pegBase :: [V2 Integer]
 pegBase = horizontalLine ++ zone1 ++ zone2 ++ zone3 ++ zone4 ++ zone5 ++ zone6
 
-basePos =
+basePos = -- base position for chess
   [ V2 40 1,
     V2 4 1,
     V2 41 12,
@@ -146,8 +147,20 @@ basePos =
 
 -- chessShape
 chessRow y = fmap (\x -> V2 x y) [0 .. 3] -- generate one row of the chess
-
 chessRows = concat (fmap (\y -> chessRow y) [0, 1]) -- generate whole chess
+
+-- initialBoard
+chessRenderBlack = concat (fmap (checkBlack) [0 .. 12]) 
+checkBlack x = 
+  case initialBoard M.! x of
+     Black1 -> fmap (\y -> (basePos !! x) + y) chessRows
+     Black2 -> fmap (\y -> (basePos !! x) + y) chessRows
+     otherwise -> []
+chessRenderWhite = concat (fmap (checkWhite) [0 .. 12])
+checkWhite x = 
+  case initialBoard M.! x of
+     White -> fmap (\y -> (basePos !! x) + y) chessRows
+     otherwise -> []
 
 -- boardShape
 horizontalLine =
@@ -183,7 +196,7 @@ zone2 =
     ++ fmap (\x -> V2 x 20) ([11, 25, 26, 44])
     ++ fmap (\x -> V2 x 21) ([12] ++ [22 .. 24] ++ [44])
     ++ fmap (\x -> V2 x 22) ([12, 20, 21, 44])
-    ++ fmap (\x -> V2 x 23) ([13] ++ [17 .. 19] ++ [43])
+    ++ fmap (\x -> V2 x 23) ([13] ++ [17 .. 19] ++ [45])
     ++ fmap (\x -> V2 x 24) ([13, 15, 16, 45])
 
 -- ....................................................
@@ -197,7 +210,7 @@ zone3 =
     ++ fmap (\x -> V2 x 32) ([16] ++ [25 .. 27] ++ [46])
     ++ fmap (\x -> V2 x 33) ([17] ++ [23, 24] ++ [46])
     ++ fmap (\x -> V2 x 34) ([17] ++ [20 .. 22] ++ [46])
-    ++ fmap (\x -> V2 x 35) ([15] ++ [33 .. 35] ++ [45])
+    ++ fmap (\x -> V2 x 35) ([17] ++ [33 .. 35] ++ [45])
 
 zone4 =
   fmap (\x -> V2 x 36) ([18] ++ [45] ++ [46])
