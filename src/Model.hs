@@ -15,12 +15,12 @@ data PlayState = PS
   , psResult :: Board.Result Board.Board -- ^ result      
   } 
 
-init :: Int -> PlayState
-init n = PS 
+initialState :: PlayState
+initialState = PS 
   { 
     psBoard  = Board.initialBoard
   , psTurn   = Board.White
-  , psResult = Board.Cont psBoard
+  , psResult = Board.Cont Board.initialBoard
   }
 
 

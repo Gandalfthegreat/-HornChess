@@ -13,12 +13,12 @@ import Graphics.Vty.Input.Events
 import Model
 import View
 
-app :: App St e ()
+app :: App PlayState e ()
 app =
   App
     { appDraw = draw, -- UI function
       appChooseCursor = const . const Nothing, -- don't need cursor
-      appHandleEvent = handleEvent, -- handle event to change state
+      appHandleEvent = control, -- handle event to change state
       appStartEvent = return,
       appAttrMap = const $ attrMap mempty [] -- add style to UI
     }

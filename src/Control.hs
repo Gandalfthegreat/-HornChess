@@ -14,17 +14,17 @@ import Control.Monad.IO.Class (MonadIO(liftIO))
 
 -------------------------------------------------------------------------------
 
-control :: PlayState -> BrickEvent n () -> EventM n (Next PlayState)
+control :: PlayState -> BrickEvent n e -> EventM n (Next PlayState)
 control s ev = case ev of 
-  T.VtyEvent (V.EvKey (V.KChar '0' )[]) -> Brick.continue (flipblack s)
-  T.VtyEvent (V.EvKey (V.KChar '1')[]) -> nextS s =<< liftIO (play1 s up)
-  T.VtyEvent (V.EvKey (V.KChar '2')[]) -> nextS s =<< liftIO (play1 s upRight)
-  T.VtyEvent (V.EvKey (V.KChar '3')[]) -> nextS s =<< liftIO (play1 s right)
-  T.VtyEvent (V.EvKey (V.KChar '4')[]) -> nextS s =<< liftIO (play1 s downRight)
-  T.VtyEvent (V.EvKey (V.KChar '5')[]) -> nextS s =<< liftIO (play1 s down)
-  T.VtyEvent (V.EvKey (V.KChar '6')[]) -> nextS s =<< liftIO (play1 s downLeft)
-  T.VtyEvent (V.EvKey (V.KChar '7')[]) -> nextS s =<< liftIO (play1 s left)
-  T.VtyEvent (V.EvKey (V.KChar '8')[]) -> nextS s =<< liftIO (play1 s upLeft)
+  T.VtyEvent (V.EvKey (V.KChar 's' )[]) -> Brick.continue (flipblack s)
+  T.VtyEvent (V.EvKey (V.KChar 'w')[]) -> nextS s =<< liftIO (play1 s up)
+  T.VtyEvent (V.EvKey (V.KChar 'e')[]) -> nextS s =<< liftIO (play1 s upRight)
+  T.VtyEvent (V.EvKey (V.KChar 'd')[]) -> nextS s =<< liftIO (play1 s right)
+  T.VtyEvent (V.EvKey (V.KChar 'c')[]) -> nextS s =<< liftIO (play1 s downRight)
+  T.VtyEvent (V.EvKey (V.KChar 'x')[]) -> nextS s =<< liftIO (play1 s down)
+  T.VtyEvent (V.EvKey (V.KChar 'z')[]) -> nextS s =<< liftIO (play1 s downLeft)
+  T.VtyEvent (V.EvKey (V.KChar 'a')[]) -> nextS s =<< liftIO (play1 s left)
+  T.VtyEvent (V.EvKey (V.KChar 'q')[]) -> nextS s =<< liftIO (play1 s upLeft)
   T.VtyEvent (V.EvKey V.KEsc _)   -> Brick.halt s
   _                               -> Brick.continue s -- Brick.halt s
 
@@ -41,7 +41,7 @@ flipblack s = case b of
 play1 :: PlayState -> (Int->Board->Int)-> IO (Board.Result Board)
 play1 s f
   | pos == npos =  return Retry
-  | otherwise = putB bo xo pos npos
+  | otherwise = return $ putB bo xo pos npos
   where
     xo = psTurn s
     bo = psBoard s

@@ -5,7 +5,7 @@ import Brick.Types
 import Brick.Widgets.Core
 import Model
 
-draw :: St -> [Widget ()]
+draw :: PlayState -> [Widget ()]
 draw st = [ui]
   where
     ui =
