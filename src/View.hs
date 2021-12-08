@@ -61,10 +61,10 @@ height = 58
 width = 64
 
 --------------------------------------------------draw function-----------------------------------------------------------------------------------------------------
-draw :: St -> [Widget Name]
+draw :: PlayState -> [Widget Name]
 draw st = [C.center (drawGrid st)]
 
-drawGrid :: St -> Widget Name
+drawGrid :: PlayState -> Widget Name
 drawGrid st =
   withBorderStyle BS.unicodeBold $
     B.borderWithLabel (str "HornChess") $ vBox rows
@@ -90,18 +90,24 @@ drawCell BlackChess = withAttr blackAttr cw
 
 --------------------------------------------------get cell to render -------------------------------------
 
+indexToBase :: [(Integer, Integer)]
 indexToBase = [(24, 89), (23, 79)]
 
+isPartOfBoard :: V2 Integer -> Bool
 isPartOfBoard c = c `elem` pegBase
 
+isPartOfBlack :: V2 Integer -> Bool
 isPartOfBlack c = c `elem` blackList
 
+isPartOfWhite :: V2 Integer -> Bool
 isPartOfWhite c = c `elem` whiteList
 
 -- whiteList = [V2 01 02]
 
+blackList :: [V2 Integer]
 blackList = [V2 15 18, V2 19 30]
 
+whiteList :: [V2 Integer]
 whiteList =
   [ V2 40 1,
     V2 4 1,

@@ -1,16 +1,41 @@
 module Model where
 
+import Board
+
 -- declaration of State, we put all data structures in St
-data St = St
-  { board :: String
+
+data State
+  = Intro
+  | Play PlayState
+  | Outro
+
+data PlayState = PS
+  { -- | current board
+    psBoard :: Board.Board,
+    -- | whose turn
+    psTurn :: Board.Chess,
+    -- | result
+    psResult :: Board.Result Board.Board
   }
 
-data Chess
-  = Black1
-  | Black2
-  | White
-  | Empty -- board in black
-  deriving (Eq, Show)
+initialState :: PlayState
+initialState =
+  PS
+    { psBoard = Board.initialBoard,
+      psTurn = Board.White,
+      psResult = Board.Cont Board.initialBoard
+    }
+
+next :: PlayState -> Board.Result Board.Board -> Either (Board.Result Board.Board) PlayState
+next s Board.Retry = Right s
+next s (Board.Cont b') =
+  Right
+    ( s
+        { psBoard = b',
+          psTurn = Board.flipXO (psTurn s)
+        }
+    )
+next s res = Left res
 
 data Pixel
   = BlackChess -- pixel for black chess (virtually Yellow)
@@ -18,14 +43,3 @@ data Pixel
   | Background -- pixel for bg (virtually grey)
   | Board -- pixel for board (virtually black)
   deriving (Eq, Show)
-
-initialState =
-  St
-    { board = "X X O"
-    }
-
---键盘操作
---状态变化
---判断赢输
---绘图
---
