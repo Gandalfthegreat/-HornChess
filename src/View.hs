@@ -61,10 +61,10 @@ height = 58
 width = 64
 
 --------------------------------------------------draw function-----------------------------------------------------------------------------------------------------
-draw :: St -> [Widget Name]
+draw :: PlayState -> [Widget Name]
 draw st = [C.center (drawGrid st)]
 
-drawGrid :: St -> Widget Name
+drawGrid :: PlayState -> Widget Name
 drawGrid st =
   withBorderStyle BS.unicodeBold $
     B.borderWithLabel (str "HornChess") $ vBox rows
@@ -90,33 +90,39 @@ drawCell BlackChess = withAttr blackAttr cw
 
 --------------------------------------------------get cell to render -------------------------------------
 
+indexToBase :: [(Integer, Integer)]
 indexToBase = [(24, 89), (23, 79)]
 
+isPartOfBoard :: V2 Integer -> Bool
 isPartOfBoard c = c `elem` pegBase
 
+isPartOfBlack :: V2 Integer -> Bool
 isPartOfBlack c = c `elem` blackList
 
+isPartOfWhite :: V2 Integer -> Bool
 isPartOfWhite c = c `elem` whiteList
 
 -- whiteList = [V2 01 02]
 
+blackList :: [V2 Integer]
 blackList = [V2 15 18, V2 19 30]
 
-whiteList =
-  [ V2 40 1,
-    V2 4 1,
-    V2 41 12,
-    V2 8 12,
-    V2 43 23,
-    V2 12 23,
-    V2 44 34,
-    V2 16 34,
-    V2 47 42,
-    V2 25 42,
-    V2 51 48,
-    V2 34 48,
-    V2 56 54
-  ]
+whiteList = chessRows
+
+-- [ V2 40 1,
+--   V2 4 1,
+--   V2 41 12,
+--   V2 8 12,
+--   V2 43 23,
+--   V2 12 23,
+--   V2 44 34,
+--   V2 16 34,
+--   V2 47 42,
+--   V2 25 42,
+--   V2 51 48,
+--   V2 34 48,
+--   V2 56 54
+-- ]
 
 --------------------------------------------------hard code chess-------------------------------------
 pegBase :: [V2 Integer]
@@ -138,9 +144,12 @@ basePos =
     V2 56 54
   ]
 
--- chessShape =
---   fmap (a -> b) (f a)
+-- chessShape
+chessRow y = fmap (\x -> V2 x y) [0 .. 3] -- generate one row of the chess
 
+chessRows = concat (fmap (\y -> chessRow y) [0, 1]) -- generate whole chess
+
+-- boardShape
 horizontalLine =
   fmap (\x -> V2 x 01) [5 .. 42]
     ++ fmap (\x -> V2 x 13) [9 .. 43]
