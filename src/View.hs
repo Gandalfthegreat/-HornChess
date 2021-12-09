@@ -88,7 +88,7 @@ drawGrid :: PlayState -> Widget Name
 drawGrid st = content st <=> (currentChessTip st)
 
 currentChessTip :: PlayState -> Widget n
-currentChessTip st = str "current chess is" <+> withAttr blackAttr (str (show (psTurn st)))
+currentChessTip st = str "current chess is" <+> (str (show (psTurn st)))
 
 -- highlightedChessStr st = case psTurn st of
 --   White -> withAttr whiteAttr (str (show (psTurn st)))
