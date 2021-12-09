@@ -181,7 +181,7 @@ hlRow y = fmap (\x -> V2 x y) [0 .. 5]
 
 hlSide y = fmap (\x -> V2 x y) [0, 5]
 
-highlightBase = hlRow 0 ++ hlRow 5 ++ hlSide 1 ++ hlSide 2 ++ hlSide 3 ++ hlSide 4
+highlightBase = hlRow 0 ++ hlRow 3 ++ hlSide 1 ++ hlSide 2
 
 renderHighlight turn b =
   fmap (\x -> (basePos !! p) + (V2 (- 1) (- 1)) + x) highlightBase
