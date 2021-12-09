@@ -81,6 +81,7 @@ drawGrid st =
     cellAt c -- give a coordinate, return a state of pixel
       | isPartOfWhite c b = WhiteChess
       | isPartOfBlack c b = BlackChess
+      | isPartOfHighlight c (psTurn st) b = Highlight
       | isPartOfBoard c = Board
       | otherwise = Background
 
@@ -90,6 +91,7 @@ drawCell Board = withAttr boardAttr cw
 drawCell Background = withAttr bgAttr cw
 drawCell WhiteChess = withAttr whiteAttr cw
 drawCell BlackChess = withAttr blackAttr cw
+drawCell Highlight = withAttr highlightAttr cw
 
 --------------------------------------------------get cell to render -------------------------------------
 
@@ -103,6 +105,7 @@ isPartOfBlack c b = c `elem` blackList b
 
 isPartOfWhite c b = c `elem` (whiteList b)
 
+isPartOfHighlight c turn b = c `elem` (renderHighlight turn b)
 -- whiteList = [V2 01 02]
 
 blackList :: M.Map Int Chess -> [V2 Integer]
@@ -171,6 +174,17 @@ checkWhite x b =
   case b M.! x of
     White -> fmap (\y -> (basePos !! x) + y) chessRows
     otherwise -> []
+
+-- highlight for selected chess
+hlRow y = fmap (\x -> V2 x y) [0..5]
+hlSide y = fmap (\x -> V2 x y) [0, 5]
+
+highlightBase = hlRow 0 ++ hlRow 5 ++ hlSide 1 ++ hlSide 2 ++ hlSide 3 ++ hlSide 4
+
+renderHighlight turn b = 
+  fmap (\x -> (basePos !! p) ++ (V2 -1 -1) ++ x ) highlightBase
+    where
+      p = findpos turn b
 
 -- boardShape
 horizontalLine =
@@ -258,6 +272,7 @@ bgAttr = "bgAttr"
 blackAttr = "blackAttr"
 whiteAttr = "whiteAttr"
 boardAttr = "boardAttr"
+highlightAttr = "highlightAttr"
 
 darkBlack = V.rgbColor 0 0 0
 
@@ -270,5 +285,6 @@ theMap =
     [ (bgAttr, grey `on` grey), -- Background
       (blackAttr, V.yellow `on` V.yellow), -- Black Chess
       (whiteAttr, V.white `on` V.white), -- White Chess
-      (boardAttr, darkBlack `on` darkBlack) -- Board, outline of HornChess
+      (boardAttr, darkBlack `on` darkBlack), -- Board, outline of HornChess
+      (highlightAttr, V.green `on` V.green) -- highlight for current selected chess
     ]
