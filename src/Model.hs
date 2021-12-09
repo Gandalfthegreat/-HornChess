@@ -42,4 +42,5 @@ data Pixel
   | WhiteChess -- pixel for white chess (virtually White)
   | Background -- pixel for bg (virtually grey)
   | Board -- pixel for board (virtually black)
+  | Highlight -- pixel for highlight area (virtually green)
   deriving (Eq, Show)
