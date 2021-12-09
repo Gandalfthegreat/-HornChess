@@ -6,6 +6,7 @@ import Brick.Main
 import Brick.Types
 import qualified Brick.Types as T
 import Control.Monad.IO.Class (MonadIO (liftIO))
+import Data.Map as M
 import qualified Graphics.Vty as V
 import Graphics.Vty.Input.Events
 import Model
@@ -27,6 +28,16 @@ control s ev = case ev of
   T.VtyEvent (V.EvKey (V.KChar 'q') []) -> nextS s =<< liftIO (play1 s upLeft)
   T.VtyEvent (V.EvKey V.KEsc _) -> Brick.halt s
   _ -> Brick.continue s -- Brick.halt s
+
+----test
+-- let f x = if x == 1 then Just White else Nothing
+-- nextBoard =
+--   M.fromList (zip [0 .. 12] [Empty, Black2, Empty, Empty, Empty, Black1, Empty, Empty, Empty, Empty, Empty, Empty, White])
+
+-- control :: PlayState -> BrickEvent n1 e -> EventM n2 (Next PlayState)
+-- control s ev = case ev of
+--   T.VtyEvent (V.EvKey (V.KChar 's') []) -> Brick.continue (flipblack s)
+--   T.VtyEvent (V.EvKey (V.KChar 'r') []) -> continue s {psBoard = nextBoard, psTurn = Black1}
 
 flipblack :: PlayState -> PlayState
 flipblack s = case b of

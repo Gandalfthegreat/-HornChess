@@ -10,7 +10,7 @@ type Board = M.Map Int Chess
 data Chess
   = Black1
   | Black2
-  | White
+  | White 
   | Empty
   deriving (Eq, Show)
 
@@ -113,63 +113,71 @@ findapos chs bb@(x : xs)
 up :: Int -> Board -> Int
 up p board =
   if head (adjacencyMatrix !! p) == 1
-    then case M.lookup p board of
-      Just Empty -> head (dirMap !! p)
+    then case M.lookup nextP board of
+      Just Empty -> nextP
       _ -> p
     else p
+    where nextP = head (dirMap !! p)
 
 down :: Int -> Board -> Int
 down p board =
   if (adjacencyMatrix !! p) !! 4 == 1
-    then case M.lookup p board of
-      Just Empty -> (dirMap !! p) !! 4
+    then case M.lookup nextP board of
+      Just Empty -> nextP
       _ -> p
     else p
+    where nextP = (dirMap !! p) !! 4
 
 left :: Int -> Board -> Int
 left p board =
   if (adjacencyMatrix !! p) !! 6 == 1
-    then case M.lookup p board of
-      Just Empty -> (dirMap !! p) !! 6
+    then case M.lookup nextP board of
+      Just Empty -> nextP
       _ -> p
     else p
+    where nextP = (dirMap !! p) !! 6
 
 right :: Int -> Board -> Int
 right p board =
   if (adjacencyMatrix !! p) !! 2 == 1
-    then case M.lookup p board of
-      Just Empty -> (dirMap !! p) !! 2
+    then case M.lookup nextP board of
+      Just Empty -> nextP
       _ -> p
     else p
+    where nextP = (dirMap !! p) !! 2
 
 upRight :: Int -> Board -> Int
 upRight p board =
   if (adjacencyMatrix !! p) !! 1 == 1
-    then case M.lookup p board of
-      Just Empty -> (dirMap !! p) !! 1
+    then case M.lookup nextP board of
+      Just Empty -> nextP
       _ -> p
     else p
+    where nextP = (dirMap !! p) !! 1
 
 upLeft :: Int -> Board -> Int
 upLeft p board =
   if (adjacencyMatrix !! p) !! 7 == 1
-    then case M.lookup p board of
-      Just Empty -> (dirMap !! p) !! 7
+    then case M.lookup nextP board of
+      Just Empty -> nextP
       _ -> p
     else p
+    where nextP = (dirMap !! p) !! 7
 
 downRight :: Int -> Board -> Int
 downRight p board =
   if (adjacencyMatrix !! p) !! 3 == 1
-    then case M.lookup p board of
-      Just Empty -> (dirMap !! p) !! 3
+    then case M.lookup nextP board of
+      Just Empty -> nextP
       _ -> p
     else p
+    where nextP = (dirMap !! p) !! 3
 
 downLeft :: Int -> Board -> Int
 downLeft p board =
   if (adjacencyMatrix !! p) !! 5 == 1
-    then case M.lookup p board of
-      Just Empty -> (dirMap !! p) !! 5
+    then case M.lookup nextP board of
+      Just Empty -> nextP
       _ -> p
     else p
+    where nextP = (dirMap !! p) !! 5
