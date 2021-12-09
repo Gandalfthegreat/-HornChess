@@ -66,8 +66,8 @@ width = 64
 draw :: PlayState -> [Widget Name]
 draw st = [C.center (drawGrid st)]
 
-drawGrid :: PlayState -> Widget Name
-drawGrid st =
+content :: PlayState -> Widget Name
+content st =
   withBorderStyle BS.unicodeBold $
     B.borderWithLabel (str "HornChess" <+> str "white in" <+> str (show (findpos White (psBoard st)))) $
       vBox rows
@@ -83,6 +83,17 @@ drawGrid st =
       | isPartOfBlack c b = BlackChess
       | isPartOfBoard c = Board
       | otherwise = Background
+
+drawGrid :: PlayState -> Widget Name
+drawGrid st = content st <=> (currentChessTip st)
+
+currentChessTip :: PlayState -> Widget n
+currentChessTip st = str "current chess is" <+> (str (show (psTurn st)))
+
+-- highlightedChessStr st = case psTurn st of
+--   White -> withAttr whiteAttr (str (show (psTurn st)))
+--   Black1 -> withAttr blackAttr (str (show (psTurn st)))
+--   Black2 -> withAttr blackAttr (str (show (psTurn st)))
 
 -- draw a cell
 drawCell :: Pixel -> Widget Name
