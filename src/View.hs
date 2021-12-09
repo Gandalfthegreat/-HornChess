@@ -62,6 +62,7 @@ height = 58
 
 width = 64
 
+--    B.borderWithLabel (str "HornChess" <+> str "white in" <+> str (show (findpos White (psBoard st)))) $
 --------------------------------------------------draw function-----------------------------------------------------------------------------------------------------
 draw :: PlayState -> [Widget Name]
 draw st = [C.center (drawGrid st)]
@@ -69,7 +70,7 @@ draw st = [C.center (drawGrid st)]
 content :: PlayState -> Widget Name
 content st =
   withBorderStyle BS.unicodeBold $
-    B.borderWithLabel (str "HornChess" <+> str "white in" <+> str (show (findpos White (psBoard st)))) $
+    B.borderWithLabel (str "HornChess") $
       vBox rows
   where
     -- draw all the cells in the grid.
@@ -88,7 +89,7 @@ drawGrid :: PlayState -> Widget Name
 drawGrid st = content st <=> (currentChessTip st)
 
 currentChessTip :: PlayState -> Widget n
-currentChessTip st = str "current chess is" <+> (str (show (psTurn st)))
+currentChessTip st = str "current chess is " <+> (str (show (psTurn st)))
 
 -- highlightedChessStr st = case psTurn st of
 --   White -> withAttr whiteAttr (str (show (psTurn st)))
