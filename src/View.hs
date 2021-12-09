@@ -106,6 +106,7 @@ isPartOfBlack c b = c `elem` blackList b
 isPartOfWhite c b = c `elem` (whiteList b)
 
 isPartOfHighlight c turn b = c `elem` (renderHighlight turn b)
+
 -- whiteList = [V2 01 02]
 
 blackList :: M.Map Int Chess -> [V2 Integer]
@@ -176,15 +177,16 @@ checkWhite x b =
     otherwise -> []
 
 -- highlight for selected chess
-hlRow y = fmap (\x -> V2 x y) [0..5]
+hlRow y = fmap (\x -> V2 x y) [0 .. 5]
+
 hlSide y = fmap (\x -> V2 x y) [0, 5]
 
 highlightBase = hlRow 0 ++ hlRow 5 ++ hlSide 1 ++ hlSide 2 ++ hlSide 3 ++ hlSide 4
 
-renderHighlight turn b = 
-  fmap (\x -> (basePos !! p) ++ (V2 -1 -1) ++ x ) highlightBase
-    where
-      p = findpos turn b
+renderHighlight turn b =
+  fmap (\x -> (basePos !! p) + (V2 (- 1) (- 1)) + x) highlightBase
+  where
+    p = findpos turn b
 
 -- boardShape
 horizontalLine =
@@ -272,6 +274,7 @@ bgAttr = "bgAttr"
 blackAttr = "blackAttr"
 whiteAttr = "whiteAttr"
 boardAttr = "boardAttr"
+
 highlightAttr = "highlightAttr"
 
 darkBlack = V.rgbColor 0 0 0
