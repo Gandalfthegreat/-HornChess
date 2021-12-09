@@ -12,4 +12,6 @@ import Model
 
 main :: IO ()
 main = do
-  void $ defaultMain app initialState
+  res <- defaultMain app initialState
+  print "The Winner is"
+  print (psResult res)
