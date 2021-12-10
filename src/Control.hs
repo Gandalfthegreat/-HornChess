@@ -49,6 +49,7 @@ flipblack s = case b of
 
 play1 :: PlayState -> (Int -> Board -> Int) -> IO (Board.Result Board)
 play1 s f
+  | (pos==12 || (pos-npos)>1) && (xo==Black2 || xo == Black1) = return Retry
   | pos == npos = return Retry
   | otherwise = return $ putB bo xo pos npos
   where
